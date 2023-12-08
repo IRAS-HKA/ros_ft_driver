@@ -6,12 +6,12 @@ from ftn_axia import FtnAxia
 from geometry_msgs.msg import Wrench
 
 
-def talker():
+def talker(ip_address):
     pub = rospy.Publisher('ftn_axia', Wrench, queue_size=10)
     rospy.init_node('ftn_axia', anonymous=True)
     rate = rospy.Rate(1000)     # 1 kHz
 
-    mySensor = FtnAxia()
+    mySensor = FtnAxia(ip_address=ip_address)
 
     while not rospy.is_shutdown():
         mySensor.read_ft()
@@ -34,7 +34,13 @@ def talker():
 
 
 if __name__ == '__main__':
-    try:
-        talker()
-    except rospy.ROSInterruptException:
-        pass
+    myargv = rospy.myargv(argv=sys.argv)
+    
+    # if no ip_addr is used, print usage
+    if len(myargv) < 2:
+        print("usage: rosrun ftn_axia80 ftn-axia-publisher.py <ip_address>")
+    else:
+        try:
+            talker(myargv[1])
+        except rospy.ROSInterruptException:
+            pass

@@ -19,8 +19,8 @@ class FtnAxia:
 
     HEADER = 0x1234
 
-    def __init__(self):
-        self.ip = "192.168.1.220"
+    def __init__(self, ip_address="192.168.1.1"):
+        self.ip = ip_address
         self.port = 49151
 
         self.init_connection()
